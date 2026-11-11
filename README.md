@@ -1,11 +1,12 @@
 # Animal Database
 
 A simple animal database w/ backend and frontend.
+
 THIS PROJECT IS STILL A WORK IN PROGRESS.
 
 ## Tech Stack
 
-- Frontend - React + Javascript
+- Frontend - React + CSS
 - Backend - Typescript + React + Express
 - Database - Dockerized mySQL (using mySQL2)
 
