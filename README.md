@@ -1,6 +1,7 @@
 # Animal Database
 
 A simple animal database w/ backend and frontend.
+THIS PROJECT IS STILL A WORK IN PROGRESS.
 
 ## Tech Stack
 
