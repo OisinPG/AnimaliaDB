@@ -1,0 +1,8 @@
+# My To-Do List
+
+- [X] Combine main .gitignore and client/.gitignore
+- [ ] Fix REST API calls to use genus
+- [ ] Include more data in Table
+- [ ] Include full taxonomic info in [id]
+- [ ] Make the ABOUT page
+- [ ] Make the TODO tasks for the RANDOM page

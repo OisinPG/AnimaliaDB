@@ -5,13 +5,15 @@
 
 # Dependencies
 node_modules/
+.pnp
+.pnp.js
 
 # Build output and test coverage
 /build/
 /dist/
 /client/build/
 /server/dist/
-/coverage/
+coverage/
 *.tsbuildinfo
 .eslintcache
 .cache/
