@@ -1,0 +1,123 @@
+/* Shared box sizing and page-level typography/colors. */
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #f3f5f8;
+    color: #1a1a1a;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.App {
+    min-height: 100vh;
+}
+
+/* Center page content and constrain its reading width. */
+main {
+    width: min(100% - 3rem, 1100px);
+    margin: 0 auto;
+    padding: 3rem 0;
+}
+
+/* Home page taxonomic count cards. */
+.counts-section h1 {
+    margin: 0 0 1.5rem;
+    color: #1f2937;
+    font-size: 1.75rem;
+}
+
+.counts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.count-card {
+    display: flex;
+    min-height: 130px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+}
+
+.count-label {
+    color: #6b7280;
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+.count-value {
+    color: #2563eb;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+/* Shared base presentation for species tables. Directory-specific controls
+   and responsive refinements live in directory/Directory.css. */
+.species-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+}
+
+.species-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.species-table caption {
+    padding: 1rem 1.25rem;
+    color: #1f2937;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.species-table th,
+.species-table td {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid #e1e5eb;
+}
+
+.species-table th {
+    background-color: #f8fafc;
+    color: #374151;
+    font-weight: 600;
+}
+
+@media (max-width: 600px) {
+    /* Use tighter page spacing and count cards on narrow screens. */
+    main {
+        width: min(100% - 2rem, 1100px);
+        padding: 2rem 0;
+    }
+
+    .counts-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+    }
+
+    .count-card {
+        min-height: 110px;
+        padding: 1.25rem;
+    }
+}

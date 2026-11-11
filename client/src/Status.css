@@ -1,0 +1,26 @@
+/* Database status label and dot inherit the same state color. */
+.database-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.database-status.is-online {
+    color: #22c55e;
+}
+
+.database-status.is-offline {
+    color: #ef4444;
+}
+
+.database-status-dot {
+    /* currentColor keeps the indicator synchronized with its label. */
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: 0 0 0.5rem;
+    border-radius: 50%;
+    background-color: currentColor;
+}

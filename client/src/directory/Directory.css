@@ -1,0 +1,127 @@
+/* Directory page heading and search/filter controls. */
+.directory-page-title {
+    margin: 0 0 1.5rem;
+    color: #1f2937;
+    font-size: 1.75rem;
+}
+
+.species-table-wrapper {
+    padding: 1.25rem;
+}
+
+.species-search {
+    display: grid;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.species-search input {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #1f2937;
+    font: inherit;
+    font-weight: 400;
+}
+
+.species-search input:focus,
+.species-filters input:focus-visible {
+    /* Make keyboard focus visible without changing the layout. */
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+    outline-offset: 2px;
+}
+
+.species-filters {
+    /* Let tag filters wrap naturally on smaller screens. */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem 1rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 8px;
+}
+
+.species-filters legend {
+    padding: 0 0.35rem;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.species-filters label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #4b5563;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.species-filters input {
+    accent-color: #2563eb;
+}
+
+/* Species table readability and row/link interaction states. */
+.species-table {
+    min-width: 460px;
+}
+
+.species-table th {
+    white-space: nowrap;
+}
+
+.species-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+.species-table a,
+.directory-back-link {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.species-table a:hover,
+.directory-back-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.species-empty {
+    color: #6b7280;
+    text-align: center;
+}
+
+/* Loading and error feedback used by both directory routes. */
+.directory-message {
+    padding: 1rem 1.25rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #4b5563;
+}
+
+.directory-message.is-error {
+    border-color: #fecaca;
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+.directory-back-link {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+}
+
+@media (max-width: 600px) {
+    /* Reduce card padding to preserve space on phones. */
+    .species-table-wrapper {
+        padding: 0.85rem;
+    }
+}
