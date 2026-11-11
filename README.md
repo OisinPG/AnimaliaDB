@@ -7,7 +7,7 @@ THIS PROJECT IS STILL A WORK IN PROGRESS.
 ## Tech Stack
 
 - Frontend - React + CSS
-- Backend - Typescript + React + Express
+- Backend - Typescript + Express
 - Database - Dockerized mySQL (using mySQL2)
 
 # How to run
