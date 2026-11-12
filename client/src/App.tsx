@@ -22,7 +22,7 @@ export default function App() {
         <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/directory" element={<DirectoryPage />} />
-            <Route path="/directory/:id" element={<AnimalPage />} />
+            <Route path="/directory/:genus/:species" element={<AnimalPage />} />
             <Route path="/random" element={<PlaceholderPage title="Random" />} />
             <Route path="/about" element={<PlaceholderPage title="About" />} />
             <Route path="*" element={<PlaceholderPage title="Page not found" />} />

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import { z } from 'zod';
 import Header from '../../Header.tsx';
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
 import '../../App.css';
@@ -10,40 +11,35 @@ import AnimalInfo from './info.tsx';
 
 declare const process: { env: { REACT_APP_API_URL?: string } };
 
-interface Animal {
-    Species_Name: string;
-    Genus_Name: string;
-    Common_Name: string;
-    Photo_URL: string | null;
-    Size: string | null;
-    Population: number | null;
-    Conservation_Status: string | null;
-    Description: string | null;
-}
+const AnimalSchema = z.object({
+    Species_Name: z.string(),
+    Genus_Name: z.string(),
+    Common_Name: z.string(),
+    triangle_eared: z.union([z.literal(0), z.literal(1)]),
+    circle_eared: z.union([z.literal(0), z.literal(1)]),
+    big_eared: z.union([z.literal(0), z.literal(1)]),
+    big_tail: z.union([z.literal(0), z.literal(1)]),
+    weird: z.union([z.literal(0), z.literal(1)]),
+    Photo_URL: z.string().nullable(),
+    Size: z.string().nullable(),
+    Population: z.number().nullable(),
+    Conservation_Status: z.string().nullable(),
+    Description: z.string().nullable(),
+    Genus_Common: z.string().nullable(),
+    Family_Name: z.string(),
+    Family_Common: z.string(),
+    Order_Name: z.string(),
+    Class_Name: z.string(),
+    Phylum_Name: z.string(),
+    Kingdom_Name: z.string(),
+});
 
-function isAnimal(value: unknown): value is Animal {
-    return typeof value === 'object'
-        && value !== null
-        && 'Species_Name' in value
-        && typeof value.Species_Name === 'string'
-        && 'Genus_Name' in value
-        && typeof value.Genus_Name === 'string'
-        && 'Common_Name' in value
-        && typeof value.Common_Name === 'string'
-        && 'Photo_URL' in value
-        && (typeof value.Photo_URL === 'string' || value.Photo_URL === null)
-        && 'Size' in value
-        && (typeof value.Size === 'string' || value.Size === null)
-        && 'Population' in value
-        && (typeof value.Population === 'number' || value.Population === null)
-        && 'Conservation_Status' in value
-        && (typeof value.Conservation_Status === 'string' || value.Conservation_Status === null)
-        && 'Description' in value
-        && (typeof value.Description === 'string' || value.Description === null);
-}
+type Animal = z.infer<typeof AnimalSchema>;
+
+const isAnimal = (value: unknown): value is Animal => AnimalSchema.safeParse(value).success;
 
 export default function AnimalPage() {
-    const { id } = useParams<{ id: string }>();
+    const { genus, species } = useParams<{ genus: string; species: string }>();
     const [animal, setAnimal] = useState<Animal>();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -55,22 +51,22 @@ export default function AnimalPage() {
         setLoading(true);
 
         const loadAnimal = async () => {
-            if (!id) {
-                setError('Missing species id.');
+            if (!genus || !species) {
+                setError('Missing genus or species name.');
                 setLoading(false);
                 return;
             }
 
             const apiUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:8080';
             try {
-                const response = await fetch(`${apiUrl}/species/${encodeURIComponent(id)}`, {
+                const response = await fetch(`${apiUrl}/species/${encodeURIComponent(genus)}/${encodeURIComponent(species)}`, {
                     signal: controller.signal,
                 });
                 if (!response.ok) throw new Error(`Request Failed: ${response.status}`);
 
                 const rows: unknown = await response.json();
                 if (!Array.isArray(rows) || !rows.every(isAnimal)) {
-                    throw new Error('The species/:id endpoint did not return a list');
+                    throw new Error('The species/:genus/:species endpoint did not return a list');
                 }
 
                 if (rows.length === 0) throw new Error('Species not found.');
@@ -85,7 +81,7 @@ export default function AnimalPage() {
 
         void loadAnimal();
         return () => controller.abort();
-    }, [id]);
+    }, [genus, species]);
 
     return (
         <div className="App">
