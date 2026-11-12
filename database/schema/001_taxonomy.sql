@@ -55,7 +55,7 @@ CREATE TABLE SPECIES (
     Photo_URL        TEXT NULL,
     Size            ENUM('Small', 'Medium', 'Large', 'varies') NULL,
     Population        BIGINT NULL,
-    Conservation_Status    ENUM('EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'LC', 'DD', 'NE') NULL,
+    Conservation_Status    ENUM('EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'CD', 'LC', 'DD', 'NE') NULL,
     Description        TEXT NULL,
     PRIMARY KEY(Genus_Name, Species_Name),
     FOREIGN KEY (Genus_Name) REFERENCES GENUS(Genus_Name)
@@ -64,50 +64,4 @@ CREATE TABLE SPECIES (
 	
 	CHECK (Population >= 0 AND
          Species_Name <> '')
-);
-
--- Tags
-CREATE TABLE TRIANGLE_EARED (
-    Species_Name    VARCHAR(50) NOT NULL,
-    Genus_Name      VARCHAR(50) NOT NULL,
-    PRIMARY KEY(Genus_Name, Species_Name),
-    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
-CREATE TABLE CIRCLE_EARED (
-    Species_Name    VARCHAR(50) NOT NULL,
-    Genus_Name      VARCHAR(50) NOT NULL,
-    PRIMARY KEY(Genus_Name, Species_Name),
-    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
-CREATE TABLE BIG_EARED (
-    Species_Name    VARCHAR(50) NOT NULL,
-    Genus_Name      VARCHAR(50) NOT NULL,
-    PRIMARY KEY(Genus_Name, Species_Name),
-    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
-CREATE TABLE BIG_TAIL (
-    Species_Name    VARCHAR(50) NOT NULL,
-    Genus_Name      VARCHAR(50) NOT NULL,
-    PRIMARY KEY(Genus_Name, Species_Name),
-    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
-);
-
-CREATE TABLE WEIRD (
-    Species_Name    VARCHAR(50) NOT NULL,
-    Genus_Name      VARCHAR(50) NOT NULL,
-    PRIMARY KEY(Genus_Name, Species_Name),
-    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
-    ON DELETE CASCADE
-    ON UPDATE CASCADE
 );

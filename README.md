@@ -1,14 +1,14 @@
 # Animal Database
 
-A simple animal database w/ backend and frontend.
+Full stack animal species directory with searchable listings, tag-based filters, and individual species detail pages. Includes REST API edpoits for species data, taxonomic counts, and database health checks, backed by a relational MySQL schema covering taxonomy and species attributes. Also has a containerized database using Docker Compose and seed data already included.
 
 THIS PROJECT IS STILL A WORK IN PROGRESS.
 
 ## Tech Stack
 
 - Frontend - React + CSS
-- Backend - Typescript + Express
-- Database - Dockerized mySQL (using mySQL2)
+- Backend - REST API using Typescript + Express
+- Database - Dockerized mySQL
 
 # How to run
 
