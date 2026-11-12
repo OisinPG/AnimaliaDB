@@ -1,14 +1,21 @@
+//so we can make API calls
 import express from 'express';
+//Cross origin resource sharing so the frontend can use this
 import cors from 'cors';
+//JS object returned by mysql2 when you run SELECT query
 import type {RowDataPacket} from 'mysql2/promise';
+//Connection pool to reuse connections rather than starting a new one every API call
 import pool from './pool.js';
 
-const app = express();
-const port = Number(process.env.PORT);
-app.use(cors());
 
+const app = express(); //Node.js Express application
+const port = Number(process.env.PORT); //PORT api connects to
+app.use(cors()); //Tells express to use CORS
+
+//Parses incoming HTTP request bodies w/ JSON in them
 app.use(express.json());
 
+//Health Check - Makes sure db is connected
 app.get('/health', async (_req, res) => {
     try {
         await pool.query('SELECT 1');
@@ -19,6 +26,7 @@ app.get('/health', async (_req, res) => {
     }
 });
 
+//Gets counts of the rows in taxoomic tables
 app.get('/count', async (_req, res) => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(`
@@ -37,6 +45,7 @@ app.get('/count', async (_req, res) => {
     }
 });
 
+//Get most of the information for all the species in our db
 app.get('/species', async (_req, res) => {
     try {
         const [rows] = await pool.query<RowDataPacket[]>(`
@@ -77,6 +86,7 @@ app.get('/species', async (_req, res) => {
     }
 });
 
+//Get all the information for a specific animal in the database
 app.get('/species/:genus/:species', async (req, res) => {
     try {
         const { genus, species } = req.params;
@@ -137,6 +147,7 @@ app.get('/species/:genus/:species', async (req, res) => {
     }
 });
 
+// Starts a web server and listens for connections on the given port
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });

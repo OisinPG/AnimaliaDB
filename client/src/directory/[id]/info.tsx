@@ -1,3 +1,5 @@
+// Shape of a single animal record used by the detail view
+// The tag fields are stored as 0/1 flags rather than booleans to match the data
 interface Animal {
     Species_Name: string;
     Genus_Name: string;
@@ -21,6 +23,7 @@ interface Animal {
     Kingdom_Name: string;
 }
 
+// Each tag key is mapped to the user-facing label shown in the detail page
 const ANIMAL_TAGS = [
     { field: 'triangle_eared', label: 'Triangle-eared' },
     { field: 'circle_eared', label: 'Circle-eared' },
@@ -29,6 +32,7 @@ const ANIMAL_TAGS = [
     { field: 'weird', label: 'Weird' },
 ] as const;
 
+// Converts the compact IUCN abbreviation from the dataset into a readable label
 function abbToWord(word: string | null): string {
      switch (word) {
         case 'EX':
@@ -57,10 +61,12 @@ function abbToWord(word: string | null): string {
 }
 
 export default function AnimalInfo(data: Animal) {
+    // Tags that the given animal has
     const tags = ANIMAL_TAGS.filter(({ field }) => data[field] === 1);
 
     return (
         <article className="animal-detail">
+            {/* Animal tags */}
             {tags.length > 0 && (
                 <ul className="animal-detail-tags" aria-label="Species tags">
                     {tags.map(({ field, label }) => (
@@ -68,8 +74,11 @@ export default function AnimalInfo(data: Animal) {
                     ))}
                 </ul>
             )}
+            {/* Animal Title */}
             <h1 className="animal-detail-title">{data.Common_Name}</h1>
+            {/* Animal Image */}
             <img className="animal-detail-image" src={data.Photo_URL ?? undefined} alt={data.Common_Name} />
+            {/* Animal Information */}
             <ul className="animal-detail-facts">
                 <li><span>Common Name</span><strong>{data.Common_Name}</strong></li>
                 <li><span>Species Name</span><strong>{data.Species_Name}</strong></li>
@@ -87,6 +96,7 @@ export default function AnimalInfo(data: Animal) {
                 <li><span>Phylum Name</span><strong>{data.Phylum_Name}</strong></li>
                 <li><span>Kingdom Name</span><strong>{data.Kingdom_Name}</strong></li>
             </ul>
+            {/* Animal Description */}
             <p className="animal-detail-description">{data.Description}</p>
         </article>
     );

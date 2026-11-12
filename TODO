@@ -6,6 +6,10 @@
 - [X] Include full taxonomic info in [id]
 - [X] Add Conservation status to table
 - [X] Filter by conservation status (drop down)
-- [ ] Make the ABOUT page
-- [ ] Comment everything
+- [X] Make the ABOUT page
+- [X] Comment DirectoryPage.tsx
+- [X] Comment Table.tsx
+- [X] Comment AnimalPage.tsx
+- [X] Comment info.tsx
 - [ ] Make the TODO tasks for the RANDOM page
+- [ ] Implement zod where applicable

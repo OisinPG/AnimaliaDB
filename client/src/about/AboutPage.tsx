@@ -9,13 +9,13 @@ export default function AboutPage() {
             <main>
                 <h1>AnimaliaDB</h1>
                 <h2>Credits</h2>
-                <p> This project was made by <b>Oisin Perkins-Gilbert</b>. The mySQL code was
+                <p> This project was made by me, <b>Oisin Perkins-Gilbert</b>. The mySQL code was
                     developed by myself and fellow students at <b>University of Washington Tacoma</b>,
                     I've asked them if I can credit them, but since they haven't responded yet
                     I will not put them here without their permission. I used tutorials
                     from <a href="https://medium.com/">https://medium.com/</a> to help me get started 
-                    (as well as for helping make the table in the DB directory page). 
-                    <b>VSCode Copilot</b> was used, mainly for debugging, style changes, and 
+                    (as well as for helping make the table in the DB directory page). <b>VSCode Copilot</b>  
+                    was used, mainly for debugging, style changes, and 
                     annoying busy work (like when I changed the
                     schema and had to change how a bunch of the front/back end worked). 
                 </p>
@@ -32,6 +32,9 @@ export default function AboutPage() {
                     <li><b>Backend</b> - Typescript + Express</li>
                     <li><b>Database</b> - Dockerized mySQL</li>
                 </ul>
+                <p> The client will make API GET calls to the backend, which will then fetch data
+                    from the mySQL database.
+                </p>
             </main>
         </div>
     );

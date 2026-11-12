@@ -1,6 +1,9 @@
+// So we can (client-side) link to specific animal pages
 import { Link } from "react-router-dom";
+// So we can use state variables
 import { useState } from 'react';
 
+// How they're displayed in frontend checkboxes: JSON
 const TAG_FIELDS = {
     'TRIANGLE-EARED': 'triangle_eared',
     'CIRCLE-EARED': 'circle_eared',
@@ -11,6 +14,7 @@ const TAG_FIELDS = {
 
 type Tag = keyof typeof TAG_FIELDS;
 
+// How they're displayed in frontend dropdown: JSON
 const CON_FIELDS = {
     'Extinct [EX]': 'EX',
     'Extinct in the Wild [EW]': 'EW',
@@ -26,6 +30,9 @@ const CON_FIELDS = {
 
 type Conservation = keyof typeof CON_FIELDS;
 
+// Each animal row contains a fixed set of metadata fields plus a boolean bucket
+// for each tag defined in TAG_FIELDS. The record intersection below ensures the
+// resulting data model includes all possible tag keys with a 0/1 value.
 export type Animal = {
     species_name: string;
     genus_name: string;
@@ -34,10 +41,13 @@ export type Animal = {
     conservation_status: string | null;
 } & Record<(typeof TAG_FIELDS)[Tag], 0 | 1>;
 
+// The table component receives the full list of animal records
 interface ListProps {
     data: Animal[];
 }
 
+// Type guards used when iterating through the tag and conservation maps from the
+// dataset, so TypeScript can narrow the keys to known union types.
 function isTag(value: string): value is Tag {
     return Object.prototype.hasOwnProperty.call(TAG_FIELDS, value);
 }
@@ -46,6 +56,8 @@ function isCons(value: string): value is Conservation {
     return Object.prototype.hasOwnProperty.call(CON_FIELDS, value)
 }
 
+// Converts the compact IUCN abbreviation from the dataset into a readable label
+// for display in the table
 function abbToWord(word: string | null): string {
      switch (word) {
         case 'EX':
@@ -74,25 +86,34 @@ function abbToWord(word: string | null): string {
 }
 
 export default function JsonDataDisplay({data}: ListProps) {
+    // What the user is searching for
     const [searchTerm, setSearchTerm] = useState('');
+    // Tags the user has selected
     const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+    // Conservation level the user wants
     const [chosenConservation, setConservation] = useState<Conservation>();
 
+    // We then filter the table based on the above variables
     const filteredData = data.filter(item => {
+        // Filter by search
         const matchesSearch = item.species_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.genus_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (item.common_name !== null && item.common_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (item.genus_common !== null && item.genus_common.toLowerCase().includes(searchTerm.toLowerCase()));
 
+        // Filter by tag
         const matchesTags = selectedTags.every(tag => item[TAG_FIELDS[tag]] === 1);
 
+        // Filter by conservation
         const matchesConservation = chosenConservation === undefined || item.conservation_status === CON_FIELDS[chosenConservation];
 
+        // Combine each filter
         return matchesSearch && matchesTags && matchesConservation;
     });
     
     return (
         <div className="species-table-wrapper">
+            {/* Search bar */}
             <label className="species-search">
                 <span>Search species</span>
                 <input
@@ -102,6 +123,7 @@ export default function JsonDataDisplay({data}: ListProps) {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 />
             </label>
+            {/* Checkboxes - Tags */}
             <fieldset className="species-filters">
                 <legend>Filter by tags</legend>
                 {Object.keys(TAG_FIELDS).filter(isTag).map(tag => (
@@ -119,6 +141,7 @@ export default function JsonDataDisplay({data}: ListProps) {
                     </label>
                 ))}
             </fieldset>
+            {/* Dropdown Menu - Conservation status */}
             <select
                 value={chosenConservation ?? ""}
                 onChange={(e) => setConservation(isCons(e.target.value) ? e.target.value : undefined)}
@@ -130,8 +153,11 @@ export default function JsonDataDisplay({data}: ListProps) {
                     </option>
                 ))}
             </select>
+            {/* Table that shows the animals */}
             <table className="species-table">
+                {/* Caption */}
                 <caption>Species Listed here</caption>
+                {/* Head */}
                 <thead>
                     <tr>
                         <th scope="col">Common Name</th>
@@ -141,13 +167,17 @@ export default function JsonDataDisplay({data}: ListProps) {
                         <th scope="col">Conservation Status</th>
                     </tr>
                 </thead>
+                {/* Body */}
                 <tbody>
                     {filteredData.length === 0 ? (
+                        // Nothing in the filtered dataset
                         <tr>
                             <td className="species-empty" colSpan={3}>No results found.</td>
                         </tr>
                     ) : filteredData.map((animal) => (
+                        // Else: stuff in the filtered dataset
                             <tr key={`${animal.genus_name}-${animal.species_name}`}>
+                                {/* Common name is a clickable link, the rest aren't */}
                                 <td>
                                     <Link to={`/directory/${encodeURIComponent(animal.genus_name)}/${encodeURIComponent(animal.species_name)}`}>
                                         {animal.common_name ?? '—'}
