@@ -7,38 +7,12 @@ import '../App.css';
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
 import './Directory.css';
 // The table which displays all the animals in the database
-// Also the animal type that table uses
-import JsonDataDisplay, { type Animal } from './Table.tsx';
+import JsonDataDisplay from './Table.tsx';
+// Zod-parsed const and type for each species
+import { SpeciesListSchema, type Animal } from './speciesSchema.ts';
 
 // Getting REACT_APP_API_URL from .env
 declare const process: { env: { REACT_APP_API_URL?: string } };
-
-// If an unknown value is a JSON flag AND 0 or 1
-function isFlag(value: unknown): value is 0 | 1 {
-    return value === 0 || value === 1;
-}
-
-// If a given value is valid for JSON returned by an API call
-function isSpeciesApiRow(value: unknown): value is Animal {
-    return typeof value === 'object'
-        && value !== null
-        && 'species_name' in value
-        && typeof value.species_name === 'string'
-        && 'genus_name' in value
-        && typeof value.genus_name === 'string'
-        && 'common_name' in value
-        && (typeof value.common_name === 'string' || value.common_name === null)
-        && 'triangle_eared' in value
-        && isFlag(value.triangle_eared)
-        && 'circle_eared' in value
-        && isFlag(value.circle_eared)
-        && 'big_eared' in value
-        && isFlag(value.big_eared)
-        && 'big_tail' in value
-        && isFlag(value.big_tail)
-        && 'weird' in value
-        && isFlag(value.weird);
-}
 
 export default function DirectoryPage() {
     // Animals we're displaying
@@ -60,12 +34,12 @@ export default function DirectoryPage() {
                 const response = await fetch(`${apiUrl}/species`, { signal: controller.signal });
                 if (!response.ok) throw new Error(`Request failed: ${response.status}`);
 
-                const rows: unknown = await response.json();
-                if (!Array.isArray(rows) || !rows.every(isSpeciesApiRow)) {
+                const result = SpeciesListSchema.safeParse(await response.json());
+                if (!result.success) {
                     throw new Error('The species endpoint did not return a list.');
                 }
 
-                setAnimals(rows);
+                setAnimals(result.data);
             } catch (cause) {
                 // We fail to get the animals
                 if (controller.signal.aborted) return;
@@ -77,7 +51,7 @@ export default function DirectoryPage() {
         };
 
         void loadAnimals();
-        
+
         return () => controller.abort();
     }, []);
 

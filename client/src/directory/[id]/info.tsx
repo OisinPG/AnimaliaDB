@@ -1,27 +1,5 @@
-// Shape of a single animal record used by the detail view
-// The tag fields are stored as 0/1 flags rather than booleans to match the data
-interface Animal {
-    Species_Name: string;
-    Genus_Name: string;
-    Common_Name: string;
-    triangle_eared: 0 | 1;
-    circle_eared: 0 | 1;
-    big_eared: 0 | 1;
-    big_tail: 0 | 1;
-    weird: 0 | 1;
-    Photo_URL: string | null;
-    Size: string | null;
-    Population: number | null;
-    Conservation_Status: string | null;
-    Description: string | null;
-    Genus_Common: string;
-    Family_Name: string;
-    Family_Common: string;
-    Order_Name: string;
-    Class_Name: string;
-    Phylum_Name: string;
-    Kingdom_Name: string;
-}
+// Zod-parsed type for Animal details
+import type { Animal } from './animalSchema.ts';
 
 // Each tag key is mapped to the user-facing label shown in the detail page
 const ANIMAL_TAGS = [

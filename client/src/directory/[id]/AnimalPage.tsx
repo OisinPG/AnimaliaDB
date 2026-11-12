@@ -4,8 +4,6 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 // Client-side links
 import { Link } from "react-router-dom";
-// So that we could do the isAnimal easier
-import { z } from 'zod';
 // Header at the top
 import Header from '../../Header.tsx';
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
@@ -14,42 +12,11 @@ import '../../App.css';
 import './AnimalPage.css';
 // Animal information
 import AnimalInfo from './info.tsx';
+// Zod-parsed const and type for Animal details
+import { AnimalListSchema, type Animal } from './animalSchema.ts';
 
 // REACT_APP_API_URL from .env
 declare const process: { env: { REACT_APP_API_URL?: string } };
-
-// Schema for the API response returned for one animal record
-// This validates the exact shape of the data before it's used on the page and
-// ensures fields like the tag booleans and nullable metadata are consistent
-const AnimalSchema = z.object({
-    Species_Name: z.string(),
-    Genus_Name: z.string(),
-    Common_Name: z.string(),
-    triangle_eared: z.union([z.literal(0), z.literal(1)]),
-    circle_eared: z.union([z.literal(0), z.literal(1)]),
-    big_eared: z.union([z.literal(0), z.literal(1)]),
-    big_tail: z.union([z.literal(0), z.literal(1)]),
-    weird: z.union([z.literal(0), z.literal(1)]),
-    Photo_URL: z.string().nullable(),
-    Size: z.string().nullable(),
-    Population: z.number().nullable(),
-    Conservation_Status: z.string().nullable(),
-    Description: z.string().nullable(),
-    Genus_Common: z.string().nullable(),
-    Family_Name: z.string(),
-    Family_Common: z.string(),
-    Order_Name: z.string(),
-    Class_Name: z.string(),
-    Phylum_Name: z.string(),
-    Kingdom_Name: z.string(),
-});
-
-// Infer the typescript shape from the zod schema so the page state and props
-// are strongly typed without duplicating the structure manually
-type Animal = z.infer<typeof AnimalSchema>;
-
-// Runtime check used before accepting an API response as an animal record
-const isAnimal = (value: unknown): value is Animal => AnimalSchema.safeParse(value).success;
 
 export default function AnimalPage() {
     // Parameters for api call
@@ -85,13 +52,13 @@ export default function AnimalPage() {
                 });
                 if (!response.ok) throw new Error(`Request Failed: ${response.status}`);
 
-                const rows: unknown = await response.json();
-                if (!Array.isArray(rows) || !rows.every(isAnimal)) {
+                const result = AnimalListSchema.safeParse(await response.json());
+                if (!result.success) {
                     throw new Error('The species/:genus/:species endpoint did not return a list');
                 }
 
-                if (rows.length === 0) throw new Error('Species not found.');
-                setAnimal(rows[0]);
+                if (result.data.length === 0) throw new Error('Species not found.');
+                setAnimal(result.data[0]);
             } catch (cause) {
                 // We fail to get the animal
                 if (controller.signal.aborted) return;
@@ -118,7 +85,7 @@ export default function AnimalPage() {
                 {/* Error */}
                 {error && <p className="directory-message is-error" role="alert">Unable to load species: {error}</p>}
                 {/* Animal Info */}
-                {!loading && !error && animal && <AnimalInfo {...animal} Genus_Common={animal.Genus_Common ?? ''} />}
+                {!loading && !error && animal && <AnimalInfo {...animal} />}
             </main>
         </div>
     );

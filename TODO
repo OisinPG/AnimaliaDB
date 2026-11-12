@@ -11,5 +11,7 @@
 - [X] Comment Table.tsx
 - [X] Comment AnimalPage.tsx
 - [X] Comment info.tsx
-- [ ] Make the TODO tasks for the RANDOM page
-- [ ] Implement zod where applicable
+- [X] Implement zod where applicable
+- [ ] Create the UI for RANDOM
+- [ ] Create the API calls for RANDOM
+- [ ] Hook up the UI and API for RANDOM

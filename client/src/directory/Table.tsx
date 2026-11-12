@@ -2,6 +2,8 @@
 import { Link } from "react-router-dom";
 // So we can use state variables
 import { useState } from 'react';
+// Zod parsed Species type
+import type { Animal } from './speciesSchema.ts';
 
 // How they're displayed in frontend checkboxes: JSON
 const TAG_FIELDS = {
@@ -29,17 +31,6 @@ const CON_FIELDS = {
 } as const
 
 type Conservation = keyof typeof CON_FIELDS;
-
-// Each animal row contains a fixed set of metadata fields plus a boolean bucket
-// for each tag defined in TAG_FIELDS. The record intersection below ensures the
-// resulting data model includes all possible tag keys with a 0/1 value.
-export type Animal = {
-    species_name: string;
-    genus_name: string;
-    common_name: string | null;
-    genus_common: string | null;
-    conservation_status: string | null;
-} & Record<(typeof TAG_FIELDS)[Tag], 0 | 1>;
 
 // The table component receives the full list of animal records
 interface ListProps {
