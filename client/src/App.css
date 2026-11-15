@@ -29,13 +29,83 @@ main {
     padding: 3rem 0;
 }
 
-/* Home page taxonomic count cards. */
-.counts-section h1 {
-    margin: 0 0 1.5rem;
+/* Shared page heading typography. */
+.counts-section h1,
+.directory-page-title,
+.animal-detail-title {
     color: #1f2937;
     font-size: 1.75rem;
 }
 
+.counts-section h1,
+.directory-page-title {
+    margin: 0 0 1.5rem;
+}
+
+.directory-back-link {
+    display: inline-block;
+    margin-bottom: 1.25rem;
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.directory-back-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.directory-message {
+    padding: 1rem 1.25rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #4b5563;
+}
+
+.directory-message.is-error {
+    border-color: #fecaca;
+    background-color: #fef2f2;
+    color: #b91c1c;
+}
+
+/* Tag filters are shared by the directory and random-species pages. */
+.species-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    margin: 0 0 1.25rem;
+    padding: 0.75rem 1rem 1rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 8px;
+}
+
+.species-filters legend {
+    padding: 0 0.35rem;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.species-filters label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #4b5563;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.species-filters input {
+    accent-color: #2563eb;
+}
+
+.species-filters input:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+    outline-offset: 2px;
+}
+
+/* Home page taxonomic count cards. */
 .counts-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));

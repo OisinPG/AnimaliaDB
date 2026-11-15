@@ -10,6 +10,8 @@ import './Directory.css';
 import JsonDataDisplay from './Table.tsx';
 // Zod-parsed const and type for each species
 import { SpeciesListSchema, type Animal } from './speciesSchema.ts';
+// Client-side links (as opposed to server-side <a>)
+import { Link } from "react-router-dom";
 
 // Getting REACT_APP_API_URL from .env
 declare const process: { env: { REACT_APP_API_URL?: string } };
@@ -59,6 +61,7 @@ export default function DirectoryPage() {
         <div className="App">
             <Header />
             <main>
+                <Link className="directory-back-link" to="/">Back to Home</Link>
                 {/* Page Title */}
                 <h1 className="directory-page-title">Species Directory</h1>
                 {/* Loading text */}

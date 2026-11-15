@@ -16,8 +16,6 @@
     /* Keep the heading above both columns. */
     grid-column: 1 / -1;
     margin: 0;
-    color: #1f2937;
-    font-size: 1.75rem;
 }
 
 .animal-detail-tags {

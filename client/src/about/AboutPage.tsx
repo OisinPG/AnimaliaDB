@@ -1,13 +1,16 @@
 import Header from '../Header.tsx';
 //@ts-ignore
 import '../App.css';
+// Client-side links (as opposed to server-side <a>)
+import { Link } from "react-router-dom";
 
 export default function AboutPage() {
     return (
         <div className = "app">
             <Header />
             <main>
-                <h1>AnimaliaDB</h1>
+                <Link className="directory-back-link" to="/">Back to Home</Link>
+                <h1 className="directory-page-title">AnimaliaDB</h1>
                 <h2>Credits</h2>
                 <p> This project was made by me, <b>Oisin Perkins-Gilbert</b>. The mySQL code was
                     developed by myself and fellow students at <b>University of Washington Tacoma</b>,
@@ -18,7 +21,7 @@ export default function AboutPage() {
                     <b>VSCode Copilot</b> was used, mainly for debugging, style changes,  
                     annoying busy work (like when I changed the
                     schema and had to change how a bunch of the front/back end worked), and honestly
-                    a lot of the /random page (that page is just a fun little addition). 
+                    a lot of the /random page (that page is just a fun little addition anyway). 
                 </p>
                 <h2>About</h2>
                 <p> Animal Database containing information on animals and their phylum, class,

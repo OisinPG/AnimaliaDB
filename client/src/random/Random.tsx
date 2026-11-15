@@ -8,8 +8,6 @@ import { startTransition } from 'react';
 import { z } from 'zod';
 import RandomAnimalCard from './RandomAnimalCard.tsx';
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
-import '../directory/Directory.css';
-// @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
 import './Random.css';
 
 const SPIN_DURATION_MS = 5000;
