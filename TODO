@@ -12,6 +12,8 @@
 - [X] Comment AnimalPage.tsx
 - [X] Comment info.tsx
 - [X] Implement zod where applicable
-- [ ] Create the UI for RANDOM
-- [ ] Create the API calls for RANDOM
-- [ ] Hook up the UI and API for RANDOM
+- [X] Create the UI for RANDOM
+- [X] Create the API calls for RANDOM
+- [X] Hook up the UI and API for RANDOM
+- [ ] Add "Back to Home" to all the pages
+- [ ] Make all the colors in the css controlled by variables?

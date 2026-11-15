@@ -11,6 +11,8 @@ import DirectoryPage from './directory/DirectoryPage.tsx';
 import AnimalPage from './directory/[id]/AnimalPage.tsx';
 // About page that explains more about the app itself
 import AboutPage from './about/AboutPage.tsx';
+// Random Page that gives you a random animal
+import RandomPage from './random/Random.tsx'
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
 import './App.css';
 
@@ -35,13 +37,12 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/directory" element={<DirectoryPage />} />
             <Route path="/directory/:genus/:species" element={<AnimalPage />} />
-            <Route path="/random" element={<PlaceholderPage title="Random" />} />
+            <Route path="/random" element={<RandomPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="*" element={<PlaceholderPage title="Page not found" />} />
         </Routes>
     );
 }
-
 
 //Home Page, the first thing someone'll see
 function HomePage() {

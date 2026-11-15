@@ -12,6 +12,32 @@ const app = express(); //Node.js Express application
 const port = Number(process.env.PORT); //PORT api connects to
 app.use(cors()); //Tells express to use CORS
 
+// String constant to left join all the tags, so I only have to update the script
+// here when another tag is added.
+const TAG_TABLES = {
+    te: 'TRIANGLE_EARED',
+    ce: 'CIRCLE_EARED',
+    be: 'BIG_EARED',
+    bt: 'BIG_TAIL',
+    w: 'WEIRD',
+} as const;
+const CONSERVATION_STATUSES = [
+    'EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'CD', 'LC', 'DD', 'NE',
+] as const;
+
+const TAG_JOINS = (
+    sourceAlias: string = 's',
+    tagsIncluded: string[] = Object.keys(TAG_TABLES),
+): string =>
+    Object.entries(TAG_TABLES)
+        .filter(([tag]) => tagsIncluded.includes(tag))
+        .map(([tag, tableName]) =>
+            ` LEFT JOIN ${tableName} ${tag}
+                ON ${tag}.Genus_Name = ${sourceAlias}.Genus_Name
+                AND ${tag}.Species_Name = ${sourceAlias}.Species_Name`,
+        )
+        .join('');
+
 //Parses incoming HTTP request bodies w/ JSON in them
 app.use(express.json());
 
@@ -45,6 +71,76 @@ app.get('/count', async (_req, res) => {
     }
 });
 
+// Gets up to 20 random species, optionally filtered by tags and conservation status.
+// Example: GET /random?tags=te,bt&conservationStatus=EN
+app.get('/random', async (req, res) => {
+    try {
+        // Accept tags as a comma-separated query parameter
+        const tagsQuery = req.query.tags;
+        if (tagsQuery !== undefined && typeof tagsQuery !== 'string') {
+            res.status(400).json({error: 'tags must be a comma-separated string'});
+            return;
+        }
+
+        // Remove whitespace and duplicates before checking the requested tags
+        const tagsIncluded = tagsQuery
+            ? [...new Set(tagsQuery.split(',').map((tag) => tag.trim()).filter(Boolean))]
+            : [];
+        const validTags = Object.keys(TAG_TABLES);
+        const invalidTags = tagsIncluded.filter((tag) => !validTags.includes(tag));
+        if (invalidTags.length > 0) {
+            res.status(400).json({
+                error: `Invalid tags: ${invalidTags.join(', ')}`,
+                validTags,
+            });
+            return;
+        }
+
+        // Only accept conservation-status codes defined by the database ENUM
+        const statusQuery = req.query.conservationStatus;
+        if (statusQuery !== undefined && typeof statusQuery !== 'string') {
+            res.status(400).json({error: 'conservationStatus must be a single status code'});
+            return;
+        }
+        if (statusQuery && !(CONSERVATION_STATUSES as readonly string[]).includes(statusQuery)) {
+            res.status(400).json({
+                error: `Invalid conservationStatus: ${statusQuery}`,
+                validStatuses: CONSERVATION_STATUSES,
+            });
+            return;
+        }
+
+        // Each requested tag adds a presence check; together the filters require all criteria
+        const filters = tagsIncluded
+            .map((tag) => `${tag}.Species_Name IS NOT NULL`);
+        // Bind user-provided values rather than interpolating them into the SQL
+        const queryParams: string[] = [];
+        if (statusQuery) {
+            filters.push('s.Conservation_Status = ?');
+            queryParams.push(statusQuery);
+        }
+        const whereClause = filters.length > 0 ? `WHERE ${filters.join(' AND ')}` : '';
+
+        // Join only the requested tag tables; with no tags, return random species unfiltered
+        const [rows] = await pool.query<RowDataPacket[]>(`
+            SELECT s.Species_name AS Species_Name,
+                   s.Genus_name AS Genus_Name,
+                   s.Common_name AS Common_Name, 
+                   s.Photo_URL AS Photo_URL, 
+                   s.Description AS Description 
+            FROM SPECIES s
+            ${TAG_JOINS('s', tagsIncluded)}
+            ${whereClause}
+            ORDER BY RAND()
+            LIMIT 20;
+        `, queryParams);
+        res.json(rows);
+    } catch (error) {
+        console.error('Random query failed:', error);
+        res.status(500).json({error: 'error on /random'});
+    }
+});
+
 //Get most of the information for all the species in our db
 app.get('/species', async (_req, res) => {
     try {
@@ -63,21 +159,7 @@ app.get('/species', async (_req, res) => {
             FROM SPECIES s
             LEFT JOIN GENUS g
                 ON g.Genus_Name = s.Genus_Name
-            LEFT JOIN TRIANGLE_EARED te
-                ON te.Genus_Name = s.Genus_Name
-            AND te.Species_Name = s.Species_Name
-            LEFT JOIN CIRCLE_EARED ce
-                ON ce.Genus_Name = s.Genus_Name
-            AND ce.Species_Name = s.Species_Name
-            LEFT JOIN BIG_EARED be
-                ON be.Genus_Name = s.Genus_Name
-            AND be.Species_Name = s.Species_Name
-            LEFT JOIN BIG_TAIL bt
-                ON bt.Genus_Name = s.Genus_Name
-            AND bt.Species_Name = s.Species_Name
-            LEFT JOIN WEIRD w
-                ON w.Genus_Name = s.Genus_Name
-            AND w.Species_Name = s.Species_Name;
+            ${TAG_JOINS('s')};
             `);
             res.json(rows);
     } catch (error) {
@@ -123,23 +205,9 @@ app.get('/species/:genus/:species', async (req, res) => {
                 ON o.Class = c.Class
             LEFT JOIN PHYLUM p
                 ON c.Phylum = p.Phylum
-            LEFT JOIN TRIANGLE_EARED te
-                ON te.Genus_Name = s.Genus_Name
-            AND te.Species_Name = s.Species_Name
-            LEFT JOIN CIRCLE_EARED ce
-                ON ce.Genus_Name = s.Genus_Name
-            AND ce.Species_Name = s.Species_Name
-            LEFT JOIN BIG_EARED be
-                ON be.Genus_Name = s.Genus_Name
-            AND be.Species_Name = s.Species_Name
-            LEFT JOIN BIG_TAIL bt
-                ON bt.Genus_Name = s.Genus_Name
-            AND bt.Species_Name = s.Species_Name
-            LEFT JOIN WEIRD w
-                ON w.Genus_Name = s.Genus_Name
-            AND w.Species_Name = s.Species_Name
-            WHERE s.Species_Name = '${species}' AND s.Genus_Name = '${genus}';
-        `);
+            ${TAG_JOINS('s')}
+            WHERE s.Species_Name = ? AND s.Genus_Name = ?;
+        `, [species, genus]);
         res.json(rows);
     } catch (error) {
         console.error('Species genus/species query failed:', error);

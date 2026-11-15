@@ -14,10 +14,11 @@ export default function AboutPage() {
                     I've asked them if I can credit them, but since they haven't responded yet
                     I will not put them here without their permission. I used tutorials
                     from <a href="https://medium.com/">https://medium.com/</a> to help me get started 
-                    (as well as for helping make the table in the DB directory page). <b>VSCode Copilot</b>  
-                    was used, mainly for debugging, style changes, and 
+                    (as well as for helping make the table in the DB directory page). 
+                    <b>VSCode Copilot</b> was used, mainly for debugging, style changes,  
                     annoying busy work (like when I changed the
-                    schema and had to change how a bunch of the front/back end worked). 
+                    schema and had to change how a bunch of the front/back end worked), and honestly
+                    a lot of the /random page (that page is just a fun little addition). 
                 </p>
                 <h2>About</h2>
                 <p> Animal Database containing information on animals and their phylum, class,
