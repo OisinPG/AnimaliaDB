@@ -1,0 +1,154 @@
+.random-controls {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+}
+
+.random-controls .species-filters {
+    margin-bottom: 0;
+}
+
+.random-status-filter {
+    display: grid;
+    max-width: 24rem;
+    gap: 0.5rem;
+    color: #374151;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.random-status-filter select {
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #1f2937;
+    font: inherit;
+    font-weight: 400;
+}
+
+.random-status-filter select:focus-visible,
+.random-spin-button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.22);
+    outline-offset: 2px;
+}
+
+.random-spin-button {
+    justify-self: start;
+    min-height: 2.75rem;
+    padding: 0.65rem 1.1rem;
+    border: 0;
+    border-radius: 6px;
+    background-color: #2563eb;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.random-spin-button:hover:not(:disabled) {
+    background-color: #1d4ed8;
+}
+
+.random-spin-button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
+.random-spin-status {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.random-animal-card {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    height: 24rem;
+    overflow: hidden;
+    border: 1px solid #e1e5eb;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+}
+
+.random-animal-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background-color: #f8fafc;
+}
+
+.random-animal-image-placeholder {
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    color: #6b7280;
+    text-align: center;
+}
+
+.random-animal-details {
+    min-height: 0;
+    overflow: hidden;
+    padding: 1.5rem;
+}
+
+.random-animal-details h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.4rem;
+}
+
+.random-animal-details a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.random-animal-details a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.random-animal-details p {
+    margin: 0;
+    color: #4b5563;
+    line-height: 1.65;
+    white-space: pre-line;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+}
+
+@media (max-width: 650px) {
+    .random-controls {
+        padding: 0.85rem;
+    }
+
+    .random-animal-card {
+        height: 32rem;
+        grid-template-columns: 1fr;
+        grid-template-rows: 14rem minmax(0, 1fr);
+    }
+
+    .random-animal-image {
+        min-height: 0;
+        max-height: none;
+    }
+
+    .random-animal-details {
+        padding: 1.15rem;
+    }
+
+    .random-animal-details p {
+        -webkit-line-clamp: 6;
+    }
+}
