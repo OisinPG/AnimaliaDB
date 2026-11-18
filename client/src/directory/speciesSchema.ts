@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { TAG_SCHEMA_FIELDS } from '../Tag_Con.ts';
 
 // Validates one species row returned by the directory endpoint
 const SpeciesSchema = z.object({
@@ -7,11 +8,7 @@ const SpeciesSchema = z.object({
     common_name: z.string().nullable(),
     genus_common: z.string().nullable(),
     conservation_status: z.string().nullable(),
-    triangle_eared: z.union([z.literal(0), z.literal(1)]),
-    circle_eared: z.union([z.literal(0), z.literal(1)]),
-    big_eared: z.union([z.literal(0), z.literal(1)]),
-    big_tail: z.union([z.literal(0), z.literal(1)]),
-    weird: z.union([z.literal(0), z.literal(1)]),
+    ...TAG_SCHEMA_FIELDS,
 });
 
 // Validates the list returned by the directory endpoint

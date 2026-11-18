@@ -9,36 +9,10 @@ import { z } from 'zod';
 import RandomAnimalCard from './RandomAnimalCard.tsx';
 // @ts-ignore CSS is loaded by the bundler; TypeScript has no CSS module declaration.
 import './Random.css';
+import { TAG_FIELDS, Tag, CON_FIELDS, Conservation } from '../Tag_Con.ts';
 
 const SPIN_DURATION_MS = 5000;
 const IMAGE_CYCLE_INTERVAL_MS = 100;
-
-// How they're displayed in frontend checkboxes: JSON
-const TAG_FIELDS = {
-    'TRIANGLE-EARED': 'te',
-    'CIRCLE-EARED': 'ce',
-    'BIG-EARED': 'be',
-    'BIG-TAIL': 'bt',
-    'WEIRD': 'w',
-} as const;
-
-type Tag = keyof typeof TAG_FIELDS;
-
-// How they're displayed in frontend dropdown: JSON
-const CON_FIELDS = {
-    'Extinct [EX]': 'EX',
-    'Extinct in the Wild [EW]': 'EW',
-    'Critically Endangered [CR]': 'CR',
-    'Endangered [EN]': 'EN',
-    'Vulnerable [VU]': 'VU',
-    'Near Threatened [NT]': 'NT',
-    'Conservation Dependent [CD]': 'CD',
-    'Least Concern [LC]': 'LC',
-    'Data Deficient [DD]': 'DD',
-    'Not Evaluated [NE]': 'NE',
-} as const
-
-type Conservation = keyof typeof CON_FIELDS;
 
 const RandomAnimalSchema = z.object({
     Species_Name: z.string(),
@@ -124,7 +98,7 @@ export default function RandomPage() {
     const loadAnimals = async () => {
         const apiUrl = process.env.REACT_APP_API_URL ?? 'http://localhost:8080';
         const params = new URLSearchParams();
-        const tagCodes = selectedTags.map((tag) => TAG_FIELDS[tag]);
+        const tagCodes = selectedTags.map((tag) => TAG_FIELDS[tag].api);
         if (tagCodes.length > 0) params.set('tags', tagCodes.join(','));
         if (chosenConservation) {
             params.set('conservationStatus', CON_FIELDS[chosenConservation]);

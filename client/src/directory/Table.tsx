@@ -4,33 +4,7 @@ import { Link } from "react-router-dom";
 import { useState } from 'react';
 // Zod parsed Species type
 import type { Animal } from './speciesSchema.ts';
-
-// How they're displayed in frontend checkboxes: JSON
-const TAG_FIELDS = {
-    'TRIANGLE-EARED': 'triangle_eared',
-    'CIRCLE-EARED': 'circle_eared',
-    'BIG-EARED': 'big_eared',
-    'BIG-TAIL': 'big_tail',
-    'WEIRD': 'weird',
-} as const;
-
-type Tag = keyof typeof TAG_FIELDS;
-
-// How they're displayed in frontend dropdown: JSON
-const CON_FIELDS = {
-    'Extinct [EX]': 'EX',
-    'Extinct in the Wild [EW]': 'EW',
-    'Critically Endangered [CR]': 'CR',
-    'Endangered [EN]': 'EN',
-    'Vulnerable [VU]': 'VU',
-    'Near Threatened [NT]': 'NT',
-    'Conservation Dependent [CD]': 'CD',
-    'Least Concern [LC]': 'LC',
-    'Data Deficient [DD]': 'DD',
-    'Not Evaluated [NE]': 'NE',
-} as const
-
-type Conservation = keyof typeof CON_FIELDS;
+import { TAG_FIELDS, Tag, CON_FIELDS, Conservation } from '../Tag_Con.ts';
 
 // The table component receives the full list of animal records
 interface ListProps {
@@ -93,7 +67,7 @@ export default function JsonDataDisplay({data}: ListProps) {
         (item.genus_common !== null && item.genus_common.toLowerCase().includes(searchTerm.toLowerCase()));
 
         // Filter by tag
-        const matchesTags = selectedTags.every(tag => item[TAG_FIELDS[tag]] === 1);
+        const matchesTags = selectedTags.every(tag => item[TAG_FIELDS[tag].property] === 1);
 
         // Filter by conservation
         const matchesConservation = chosenConservation === undefined || item.conservation_status === CON_FIELDS[chosenConservation];
