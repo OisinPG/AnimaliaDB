@@ -1,15 +1,12 @@
 import { z } from 'zod';
+import { TAG_SCHEMA_FIELDS } from '../../Tag_Con.ts';
 
 // Validates the complete animal record returned by the detail endpoint
 const AnimalSchema = z.object({
     Species_Name: z.string(),
     Genus_Name: z.string(),
     Common_Name: z.string(),
-    triangle_eared: z.union([z.literal(0), z.literal(1)]),
-    circle_eared: z.union([z.literal(0), z.literal(1)]),
-    big_eared: z.union([z.literal(0), z.literal(1)]),
-    big_tail: z.union([z.literal(0), z.literal(1)]),
-    weird: z.union([z.literal(0), z.literal(1)]),
+    ...TAG_SCHEMA_FIELDS,
     Photo_URL: z.string().nullable(),
     Size: z.string().nullable(),
     Population: z.number().nullable(),

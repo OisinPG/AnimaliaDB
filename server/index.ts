@@ -12,19 +12,22 @@ const app = express(); //Node.js Express application
 const port = Number(process.env.PORT); //PORT api connects to
 app.use(cors()); //Tells express to use CORS
 
-// String constant to left join all the tags, so I only have to update the script
-// here when another tag is added.
+// Configure tag tables here; their names also determine the API record fields.
 const TAG_TABLES = {
     te: 'TRIANGLE_EARED',
     ce: 'CIRCLE_EARED',
     be: 'BIG_EARED',
     bt: 'BIG_TAIL',
     w: 'WEIRD',
+    fl: 'FLUFFY',
 } as const;
-const CONSERVATION_STATUSES = [
-    'EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'CD', 'LC', 'DD', 'NE',
-] as const;
 
+// SELECT statements done with all the tags in TAG_TABLES
+const TAG_SELECTS = Object.entries(TAG_TABLES)
+    .map(([tag, tableName]) => `(${tag}.Species_Name IS NOT NULL) AS ${tableName.toLowerCase()}`)
+    .join(',\n');
+
+// LEFT JOIN statements done with all the tags in TAG_TABLES
 const TAG_JOINS = (
     sourceAlias: string = 's',
     tagsIncluded: string[] = Object.keys(TAG_TABLES),
@@ -37,6 +40,12 @@ const TAG_JOINS = (
                 AND ${tag}.Species_Name = ${sourceAlias}.Species_Name`,
         )
         .join('');
+
+const CONSERVATION_STATUSES = [
+    'EX', 'EW', 'CR', 'EN', 'VU', 'NT', 'CD', 'LC', 'DD', 'NE',
+] as const;
+
+
 
 //Parses incoming HTTP request bodies w/ JSON in them
 app.use(express.json());
@@ -151,11 +160,7 @@ app.get('/species', async (_req, res) => {
                 s.Common_Name AS common_name,
                 (g.Common_Name) AS genus_common,
                 s.Conservation_status AS conservation_status,
-                (te.Species_Name IS NOT NULL) AS triangle_eared,
-                (ce.Species_Name IS NOT NULL) AS circle_eared,
-                (be.Species_Name IS NOT NULL) AS big_eared,
-                (bt.Species_Name IS NOT NULL) AS big_tail,
-                (w.Species_Name IS NOT NULL) AS weird
+                ${TAG_SELECTS}
             FROM SPECIES s
             LEFT JOIN GENUS g
                 ON g.Genus_Name = s.Genus_Name
@@ -177,11 +182,7 @@ app.get('/species/:genus/:species', async (req, res) => {
                 s.Species_Name AS Species_Name,
                 s.Genus_Name AS Genus_Name,
                 s.Common_Name AS Common_Name,
-                (te.Species_Name IS NOT NULL) AS triangle_eared,
-                (ce.Species_Name IS NOT NULL) AS circle_eared,
-                (be.Species_Name IS NOT NULL) AS big_eared,
-                (bt.Species_Name IS NOT NULL) AS big_tail,
-                (w.Species_Name IS NOT NULL) AS weird,
+                ${TAG_SELECTS},
                 s.Photo_URL AS Photo_URL,
                 s.Size AS Size,
                 s.Population AS Population,

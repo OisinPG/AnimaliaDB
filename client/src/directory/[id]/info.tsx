@@ -1,14 +1,6 @@
 // Zod-parsed type for Animal details
 import type { Animal } from './animalSchema.ts';
-
-// Each tag key is mapped to the user-facing label shown in the detail page
-const ANIMAL_TAGS = [
-    { field: 'triangle_eared', label: 'Triangle-eared' },
-    { field: 'circle_eared', label: 'Circle-eared' },
-    { field: 'big_eared', label: 'Big-eared' },
-    { field: 'big_tail', label: 'Big-tailed' },
-    { field: 'weird', label: 'Weird' },
-] as const;
+import { TAG_FIELDS } from '../../Tag_Con.ts';
 
 // Converts the compact IUCN abbreviation from the dataset into a readable label
 function abbToWord(word: string | null): string {
@@ -40,15 +32,15 @@ function abbToWord(word: string | null): string {
 
 export default function AnimalInfo(data: Animal) {
     // Tags that the given animal has
-    const tags = ANIMAL_TAGS.filter(({ field }) => data[field] === 1);
+    const tags = Object.values(TAG_FIELDS).filter(({ property }) => data[property] === 1);
 
     return (
         <article className="animal-detail">
             {/* Animal tags */}
             {tags.length > 0 && (
                 <ul className="animal-detail-tags" aria-label="Species tags">
-                    {tags.map(({ field, label }) => (
-                        <li key={field} className="animal-tag">{label}</li>
+                    {tags.map(({ property, label }) => (
+                        <li key={property} className="animal-tag">{label}</li>
                     ))}
                 </ul>
             )}

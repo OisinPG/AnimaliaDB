@@ -35,3 +35,20 @@ INSERT INTO BIG_TAIL (Genus_Name, Species_Name) VALUES
 INSERT INTO WEIRD (Genus_Name, Species_Name) VALUES
 ('Procyon', 'cancrivorus'),
 ('Ursus', 'thibetanus');
+
+INSERT INTO FLUFFY (Genus_Name, Species_Name) VALUES
+('Nyctereutes', 'procyonoides'),
+('Nyctereutes', 'viverrinus'),
+('Procyon', 'cancrivorus'),
+('Procyon', 'lotor'),
+('Procyon', 'pygmaeus'),
+('Ursus', 'americanus'),
+('Ursus', 'arctos'),
+('Ursus', 'maritimus'),
+('Ursus', 'thibetanus'),
+('Vulpes', 'corsac'),
+('Vulpes', 'lagopus'),
+('Vulpes', 'macrotis'),
+('Vulpes', 'velox'),
+('Vulpes', 'vulpes'),
+('Vulpes', 'zerda');

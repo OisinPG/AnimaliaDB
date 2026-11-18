@@ -45,3 +45,12 @@ CREATE TABLE WEIRD (
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
+
+CREATE TABLE FLUFFY (
+    Species_Name    VARCHAR(50) NOT NULL,
+    Genus_Name      VARCHAR(50) NOT NULL,
+    PRIMARY KEY(Genus_Name, Species_Name),
+    FOREIGN KEY(Genus_Name, Species_Name) REFERENCES SPECIES(Genus_Name, Species_Name)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);

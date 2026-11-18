@@ -26,7 +26,7 @@ If .gitignore is doing its job, you'll have to make the .env file. This is easy:
 
 ## Docker Commands
 
-Creates a custom MySQL image with the schema and seed scripts from `database/migrations/001_create.sql` and `database/seeds/002_seed.sql` copied into MySQL's initialization directory. This avoids Windows file-bind mount issues. Initialization only runs when Docker makes the database the first time.
+Creates a custom MySQL image with the SQL files from `database/schema/` and `database/seeds/` copied into MySQL's initialization directory. This avoids Windows file-bind mount issues. Initialization only runs when Docker creates the database for the first time.
 
 ```powershell
 docker compose up -d db
@@ -144,3 +144,40 @@ Turn off the docker when done:
 ```powershell
 docker compose down
 ```
+
+# Adding a new tag
+
+Adding a tag requires a database table, seed data, an API tag code, API record fields, and a frontend tag definition.
+
+- Note: *Adding a species is similar*, but you skip steps 1, 3, and 4, and insert your species in the SPECIES table alongside all the other species in `database/seeds/003_taxonomy.sql`. You'll also need to add the species' genus, family, order, etc. if the table doesn't already contain it (the appropriate tables shouldn't be hard to find).
+
+1. Add a tag table to `database/schema/002_tags.sql`. Use the existing tables as a template and make `Genus_Name, Species_Name` the primary key, with a foreign key to `SPECIES`.
+
+2. Add an `INSERT INTO <TABLE_NAME> ...` block to `database/seeds/004_tags.sql`. Each row must reference an existing `(Genus_Name, Species_Name)` pair from `database/seeds/003_taxonomy.sql`.
+
+3. Add the table and a short API code to `TAG_TABLES` in `server/index.ts`. For example:
+
+```ts
+const TAG_TABLES = {
+    te: 'TRIANGLE_EARED',
+    // Add: xy: 'NEW_TAG_TABLE',
+} as const;
+```
+
+4. Add the tag to `TAG_FIELDS` in `client/src/Tag_Con.ts`:
+
+```ts
+'NEW-TAG': { api: 'xy', property: 'new_tag', label: 'New tag' },
+```
+
+`TAG_FIELDS` drives both tag filter controls and detail-page labels, so no additional frontend tag list is normally needed.
+
+5. Tag changes also require rebuilding the database image. If this is a disposable development database, reset the Docker volume so MySQL reruns all initialization scripts:
+
+```powershell
+docker compose down -v
+docker compose up --build -d db
+docker compose ps
+```
+
+The `-v` option deletes the `mysql_data` volume and all database data. Do not use it for a database you need to preserve. For an existing database with preserved data, run the new schema and seed statements against MySQL manually instead, and rebuild/restart the application containers afterward.

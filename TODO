@@ -15,5 +15,8 @@
 - [X] Create the UI for RANDOM
 - [X] Create the API calls for RANDOM
 - [X] Hook up the UI and API for RANDOM
-- [ ] Add "Back to Home" to all the pages
+- [X] Add "Back to Home" to all the pages
+- [X] Add fluffy tag
+- [X] Change how tags are handled based on how easy it was to add a fluffy tag
 - [ ] Make all the colors in the css controlled by variables?
+- [ ] Asian Black Bear image too short, do something about it
