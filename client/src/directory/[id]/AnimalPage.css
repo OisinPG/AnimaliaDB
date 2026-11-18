@@ -6,10 +6,10 @@
     gap: 1.5rem 2rem;
     overflow: hidden;
     padding: 1.5rem;
-    border: 1px solid #e1e5eb;
+    border: 1px solid var(--color-border);
     border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 16px rgba(26, 26, 26, 0.06);
+    background-color: var(--color-surface);
+    box-shadow: 0 4px 16px var(--shadow-card);
 }
 
 .animal-detail-title {
@@ -30,10 +30,10 @@
 
 .animal-tag {
     padding: 0.3rem 0.7rem;
-    border: 1px solid #bfdbfe;
+    border: 1px solid var(--color-tag-border);
     border-radius: 999px;
-    background-color: #eff6ff;
-    color: #414141;
+    background-color: var(--color-tag-background);
+    color: var(--color-tag-text);
     font-size: 0.8rem;
     font-weight: 600;
 }
@@ -44,7 +44,7 @@
     max-height: 420px;
     aspect-ratio: 4 / 3;
     border-radius: 8px;
-    background-color: #f3f5f8;
+    background-color: var(--color-page-background);
     object-fit: cover;
 }
 
@@ -62,7 +62,7 @@
     justify-content: space-between;
     gap: 1rem;
     padding: 0.8rem 0;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--color-border-divider);
 }
 
 .animal-detail-facts li:first-child {
@@ -70,11 +70,11 @@
 }
 
 .animal-detail-facts span {
-    color: #6b7280;
+    color: var(--color-text-muted);
 }
 
 .animal-detail-facts strong {
-    color: #1f2937;
+    color: var(--color-heading);
     text-align: right;
 }
 
@@ -82,7 +82,7 @@
     /* Description spans the full card beneath the image and facts. */
     grid-column: 1 / -1;
     margin: 0;
-    color: #4b5563;
+    color: var(--color-text-secondary);
     line-height: 1.7;
     white-space: pre-line;
 }

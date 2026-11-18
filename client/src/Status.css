@@ -9,11 +9,11 @@
 }
 
 .database-status.is-online {
-    color: #22c55e;
+    color: var(--color-success);
 }
 
 .database-status.is-offline {
-    color: #ef4444;
+    color: var(--color-danger);
 }
 
 .database-status-dot {
