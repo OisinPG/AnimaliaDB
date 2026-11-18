@@ -1,6 +1,6 @@
 # Animal Database
 
-Full stack animal species directory with searchable listings, tag-based filters, and individual species detail pages. Includes REST API edpoits for species data, taxonomic counts, and database health checks, backed by a relational MySQL schema covering taxonomy and species attributes. Also has a containerized database using Docker Compose and seed data already included.
+Full stack animal species directory with searchable listings, tag-based filters, and individual species detail pages. Includes REST API endpoints for species data, taxonomic counts, and database health checks, backed by a relational MySQL schema covering taxonomy and species attributes. Also has a containerized database using Docker Compose and seed data already included.
 
 THIS PROJECT IS STILL A WORK IN PROGRESS.
 
